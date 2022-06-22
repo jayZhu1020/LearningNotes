@@ -666,6 +666,10 @@ int main() {
 #include <unordered_set>
 
 int main() {
-    // create a hashmap
+    // create an empty hashmap
+    std::unordered_map<int, int> m;
+    // create an empty hashset
+    std::unordered_set<int> s;
+    // 
 }
 ```

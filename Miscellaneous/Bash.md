@@ -85,9 +85,13 @@ whoami
 1. `Ctrl + H`: delete the letter starting at the cursor
 2. `Ctrl + W`: delete the word starting at the cursor
 3. `TAB`: auto complete
-4.  `Ctrl + U`: clear the line
-5.  `Ctrl + C`: cancel currently running commands
-6.  `Ctrl + L`: clear the screen
+4. `Ctrl + U`: clear the line
+5. `Ctrl + C`: cancel currently running commands
+6. `Ctrl + L`: clear the screen
+7. `Ctrl + A`: move to the start of the command line
+8. `Ctrl + E`: move to tje end of the command line
+9. `Alt + LEFTARROW`: move back one word
+10. `Alt + RIGHTARROW`: move forward one word 
 
 **Special Characters**
 1. `/`: used for directory

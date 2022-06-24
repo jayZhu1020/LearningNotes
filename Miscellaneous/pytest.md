@@ -42,3 +42,20 @@ retcode = pytest.main()
 ```python
 retcode = pytest.main(["-x", "mytestdir"])
 ```
+
+## Write and report assertions in tests
+Pytest allows you to use the standard Python `assert` for verifying expectations and values in Python tests.
+```python
+def f():
+    return 3
+
+def test_function():
+    assert f() == 3
+```
+When the assertion fails, a trace back is shown. Instead of showing the traceback, a custom message can instead be shown:
+```python
+assert f() == 3, "The value is not 3"
+```
+
+
+

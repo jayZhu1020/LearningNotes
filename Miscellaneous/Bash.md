@@ -110,3 +110,9 @@ whoami
 14. `&`: Execute a job in the background and immediately get your shell back.
 15. `&&`: “AND logical operator”. It returns (success) only if both the linked test conditions are true.
 16. `;`: “Command separator”. Allows you to execute multiple commands in a single line.
+
+Get manual for some comand
+```console
+$ man COMMAND
+```
+

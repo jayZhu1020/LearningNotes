@@ -116,3 +116,17 @@ Get manual for some comand
 $ man COMMAND
 ```
 
+Prints argument to terminal
+```console
+$ echo [options] [strings]
+```
+
+Clear command line
+```console
+$ clear
+```
+
+Pause the command for some n seconds
+```
+$ sleep n
+```

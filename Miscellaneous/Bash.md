@@ -127,6 +127,83 @@ $ clear
 ```
 
 Pause the command for some n seconds
-```
+```console
 $ sleep n
 ```
+
+Retrieve files
+```console
+$ ls [options] 
+```
+common options:
+`-a`: also displays hidden directories. `-s`: shows the size of files.
+
+create directory
+```console
+$ mkdir [directory names]
+```
+
+deleting empty directory
+```console
+$ rmdir [directory names]
+```
+
+create new files
+```console
+$ touch [option] [file_name(s)]
+```
+common options:
+`-a`: change the access time of the files
+`-m`: change the mofication time of the files
+
+remove files
+```console
+$ rm [options] [file_name(s)]
+```
+common options:
+`-r`: recursive, recursively delete directories
+`-f`: force delete without warning
+`-i`: delete with user confirmation
+
+get word count
+```console
+$ wc [option] [file]
+```
+wc diaplays `[number of lines] [number of words] [number of characters]`
+common options:
+`-m`: print character counts
+`-c`: print byte counts
+`-l`: print newline counts
+`-w`: print word count
+
+concatenation, file reading and file creation
+```console
+$ cat [option] [file_name(s)]
+```
+
+concatenate files
+```console
+$ cat file1 file2 ... filen
+```
+
+file reading
+```console
+$ cat [file_name(s)] // To print contents of file
+
+$ cat [file_name] > [file_name] // To redirect content to another file
+
+$ cat [file_name] | less // To filter the content to be displayed with piping
+```
+
+file creation
+```console
+$ cat > [new_file_name]  // To create new file or overwrite if file already exists
+
+$ cat >> [existing_file_name] // To preserve previous file if it already exists by appending any new text
+```
+
+move and rename
+```console
+$ mv [options] [source] [destination]
+```
+

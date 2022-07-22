@@ -95,7 +95,7 @@ whoami
 
 **Special Characters**
 1. `/`: used for directory
-2. `\`: used as escape character
+2. ``: used as escape character
 3. `#`: starts a comment
 4. `.`: returns the current directory
 5. `..`: returns the parent directory
@@ -205,5 +205,25 @@ $ cat >> [existing_file_name] // To preserve previous file if it already exists 
 move and rename
 ```console
 $ mv [options] [source] [destination]
+```
+
+Create soft Link
+```console
+$ ln -s <source_name> <link_name>
+```
+
+Create hard Link
+```console
+$ ln <source_name> <link_name>
+```
+
+Check current directory
+```console
+$ pwd
+```
+
+Navigate between directories
+```console
+$ cd [option] [directory_name]
 ```
 

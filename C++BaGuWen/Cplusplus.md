@@ -137,7 +137,7 @@ class ClassName {
         ClassName(const ClassName& other) = delete;
 };
 ```
-We can also use this property to specify whether an object can be created on heap or on stack\
+We can also use this property to specify whether an object can be created on heap or on stack
 1. If we don't want the object to be created on heap, use `=delete` on the `new` operator
 2. If we don't want the object to be created on stack, use `=delete` on the destructor
 ```c++
@@ -375,7 +375,7 @@ int main() {
 	std::string str1 = "abcd";
 	std::string str2 = "efgh";
 	std::cout << "str1: " << str1 << std::endl; 
-	std::cout << "str2: " << str2 << "\n\n";
+	std::cout << "str2: " << str2 << "nn";
     // OUTPUT: 
     // str1: abcd
     // str2: efgh
@@ -384,7 +384,7 @@ int main() {
 	str2 = str1;             
 	std::cout << "After copying" << std::endl;
 	std::cout << "str1: " << str1 << std::endl;
-	std::cout << "str2: " << str2 << "\n\n";
+	std::cout << "str2: " << str2 << "nn";
     // OUTPUT:
     // After copying
     // str1: abcd
@@ -397,7 +397,7 @@ int main() {
 	str2 = std::move(str1);
 	std::cout << "After moving" << std::endl;
 	std::cout << "str1: " << str1 << std::endl;
-	std::cout << "str2: " << str2 << "\n\n";
+	std::cout << "str2: " << str2 << "nn";
     // OUTPUT:
     // After moving:
     // str1: 

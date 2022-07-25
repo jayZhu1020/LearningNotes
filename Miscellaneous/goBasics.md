@@ -944,8 +944,45 @@ func main() {
 }
 ```
 
+A `nil` chanel will block the select statement forever. The following code results in a deadlock
 
+```go
+package main
 
+import (
+	"fmt"
+)
 
+func main() {
+	channel1 := make(chan string)
+	channel1 = nil // a nil channel
+
+	select {
+	case message1 := <-channel1:
+		fmt.Println(message1)
+	}
+}
+```
+
+One way to resolve is to add a default selection to allow it to exit
+```go
+package main
+
+import (
+	"fmt"
+)
+
+func main() {
+	channel1 := make(chan string)
+	channel1 = nil
+
+	select {
+	case message1 := <-channel1:
+		fmt.Println(message1)
+	default:
+        fmt.Println("No channel is ready")
+    }
+}
+```
 
 ### `sync` Package

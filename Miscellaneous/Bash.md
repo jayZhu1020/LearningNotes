@@ -227,3 +227,48 @@ Navigate between directories
 $ cd [option] [directory_name]
 ```
 
+Copy files in Bash
+```console
+$ cp [option] [file_name] new_file_name
+```
+Option:
+`-r`: recursively copy
+
+Zip files in bash
+```console
+$ tar [option(s)] [archive_file_name] [file_name(s)]
+```
+This command requires a option to run
+`-c`: creates an archive
+`-x`: extracts an archive
+`-f`: creates archive with the same name
+`-t`: displays the files archive
+`-z`: creates archive with `gzip`
+`-r`: update the archive file with new files
+`-v`: verbose
+
+Alternative command:
+```console
+$ gzip [option(s)] [file_name(s)]
+```
+Options:
+`-k`: compress files in original form
+`-d`: devompress gzip files
+
+**Searching an Locating**
+search for the locations of files and directories.
+```console
+$ locate [options] name(s)
+```
+Options:
+`-q`: suppress error messages
+`-n x`: limit the result to `x` numbers
+`-i`: case insensitive search
+
+```console
+$ find [path...] [expression]
+```
+`-type f`	Selects files.
+`-type d`	Selects directories.
+`-name`	True if the base of the file name (the path with the leading directories removed) matches shell pattern pattern.
+

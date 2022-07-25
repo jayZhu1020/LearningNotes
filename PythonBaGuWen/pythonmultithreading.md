@@ -150,8 +150,17 @@ Difference between muetx and binary semaphore?
 
 A mutex is owned by the thread acquiring it till the point the owning-thread releases it, whereas for a semaphore there's no notion of ownership.
 
-### Mutex and Monitor
-TO BE CONTINUED
+### Mutex and Condition variables and Monitor
+A **condition variable** can be thought as a wrapper on top of a mutex that implements `signal()` and `wait()` function.
+1. The `wait()` method, when called on the condition variable, will cause the associated mutex to be atomaticallyand temporatily released and the calling thread would be placed in a wait queue
+2. The `signal()` method, when called on a condition variable, causes one of the threads that has been placed in the wait queue to get ready for execution
+Note that `signal()` function does not release the mutex. It just informs the threads in the wait queue to get ready. It has to release the mutex to allow threads in the wait queue to acquire it
+
+To demonstrate the usage of condition variable, consider the following scenario:
+1. A consumer thread want to consume some resource but but cannot do so until a producer produces it
+2. The consumer has to wait until the produce has produced the product
+
+An implementation of this can be 
 
 ### Mesa and Hoare Monitors
 TO BE CONTINUED

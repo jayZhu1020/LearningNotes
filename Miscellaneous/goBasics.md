@@ -986,3 +986,38 @@ func main() {
 ```
 
 ### `sync` Package
+
+#### `Waitgroup`
+A `WaitGroup` blocks a program and waits for a set of goroutines to finish before moving to the next steps of execution.
+
+We can use WaitGroups through the following functions:
+
+`.Add(int)`: This function takes in an integer value which is essentially the number of goroutines which the waitgroup has to wait for. This function must be called before we execute a goroutine.
+`.Done()`: This function is called within the goroutine to signal that the goroutine has successfully executed.
+`.Wait()`: This function blocks the program until all the goroutines specified by `Add()` have invoked `Done()` from within.
+
+#### `Mutex`
+A `Mutex`, or a mutual exclusion prevents other processes from entering a critical section of data while a process occupies it.
+
+We import mutex from the sync package in Go. sync.mutex has two methods:
+
+`.Lock()` : acquires/holds the lock
+`.Unlock()`: releases the lock
+
+A `RWMutex` stands for Reader/Writer mutual exclusion and is essentially the same as Mutex, but it gives the lock to multiple reading processs or just one writing process.
+
+#### `Pool`
+TO BE LEARNT
+
+#### `Once`
+TO BE LEARNT
+
+#### `Cond`
+TO BE LEARNT
+
+### `runtime` package
+runtime package provides functions to specify how many CPUs we can use in the current machine and how man CPUs it is currently using.
+
+TO BE LEARNT IN THE FUTURE
+
+### 

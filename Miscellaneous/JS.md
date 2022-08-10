@@ -874,3 +874,62 @@ arr.reduce(function(previousValue, currentValue, currentIndex, array) { /* … *
 ```
 
 ## Object methods
+### `Object.assign`
+`Object.assign` assigns properties from other objects to some object
+```javascript
+Object.assign(target, ...sources)
+```
+A shallow copy is made for each properties in source
+
+### `Object.keys`, `Object.values`, `Object.entries`
+`Object.keys` returns an array of property keys in string
+```javascript
+const obj = {
+    key1: "val1",
+    key2: "val2"
+}
+Object.keys(obj) // ['key1', 'key2']
+```
+
+`Object.values` returns an array of property values
+```javascript
+Object.values(obj) // ['val1', 'val2']
+```
+
+`Object.entries` returns an array of [key, value] entreis for that object
+```javascript 
+console.log(entries); // -> [ [ 'key1', 'val1' ], [ 'key2', 'val2' ] ]
+```
+
+### `Object.defineProperty`
+`Object.defineProperty` allows us to define properties with specification. By specifying
+1. `value`
+2. `writable`
+3. `configurable`
+4. `enumerable`
+we can define the behavior and value of a object's property. 
+
+See [MDN doc](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty)
+
+### `Object.preventExtensions`
+`Object.preventExtensions` does the following:
+1. Prevents addition of properties
+2. Locks prototype
+3. Works on objects, arrays, and functions
+4. Performs a shallow change
+5. Makes Object.isExtensible return false
+
+`Object.seal` does the following:
+1. Makes every existing property non-configurable
+2. Makes Object.isSealed return true
+
+`Object.freeze` does the following:
+1. Makes every existing property non-writable
+2. Makes Object.isFrozen return true
+
+## Asynchronous JS
+Javascript maintains a stack, a heap, a webapi, a callback queue and event loop. More detail can be found on
+
+https://www.youtube.com/watch?v=8aGhZQkoFbQ&t=1s
+
+Dynamic loading and File I/O will benefit most from asynchronous JS. Dynamic loading means loading more content based on user's action. File I/O refers to file input and output which usually takes a lot of time and can be deferred.

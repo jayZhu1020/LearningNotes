@@ -1,4 +1,4 @@
-# Intermediate Javascript
+# Modern Javascript
 
 ## Scope
 Any variable declare in the file outside of any function will be global scope
@@ -704,8 +704,25 @@ All objects has an attribute `__proto__` to an object with several properties:
 const obj = {};
 console.log(obj.__proto__);
 // -> {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+console.log(Object.prototype)
+// -> {constructor: ƒ, __defineGetter__: ƒ, __defineSetter__: ƒ, hasOwnProperty: ƒ, __lookupGetter__: ƒ, …}
+console.log(Object.prototype.__proto__)
+// -> null
 ```
-For the function object `Object`, we have that `Object.prototype` is a "base" object having `__proto__` equals to `null`. This implies that `Object` is the end of the prototype chain. It has no parent prototype. 
+We can see that for any object literal `const obj = {}`, we have `obj.__proto__ === Object.prototype`. Under the hood, the object literals are created by calling `const obj = new Object()`. Similarly, when we create an array `const arr = []`, we are calling `const arr = new Array()`.
+
+Also, Object function's prototype chain points to `null`. This means that `Object` is the base class of every object.
+
+Javascript functions `function fn` also has `prototype` property. Note that this is different from the `__proto__` above. We can think of `prototype` stores the avaliable functions and utilities that are attach to the classes which were created by `new fn()`. On the other hand, `__proto__` points to the parent class's prototypes. 
+
+Then we look at any functions
+```javascript
+function Parent() {}
+
+let p = new Parent()
+
+console.log(p)
+```
 
 When we look for a property of an object, say `object.someproperty`, the JavaScript engine will first check the object itself for the existence of the property, i.e. whether `someproperty` in `object.property`. If not found, it’ll go to the object’s prototype and check that object, i.e. whether `someproperty` in `object.__proto__`. If found, it’ll use that property. If it finds `null` at some step, it returns `undefined`.
 
@@ -718,183 +735,142 @@ There are several functions used to manage `__proto__` and properties of a objec
 
 4. `Object.setPrototypeOf`: It allows us to change an object’s `__proto__` property.
 
+One thing to note is that for every function `Fn`, it has `Fn.prototype.constructor` equals to itself.
+
+A few things to remember:
+1. All functions have a prototype proeprty distinct from `__proto__`
+2. The `__proto__` of a function’s prototype is equal to Object.prototype
+3. The `__proto__` of Object.prototype is null
+4. The `__proto__` of an object created by invoking a function with new is equal to the function’s prototype
 
 
-
-## `vue.js`
-Vue is based on the idea of virtual DOM. A DOM (Document Object Model) is used as the structure of the HTML files where components are nested within each other. To search a component in a DOM, the cost is expensive. Virtual DOM represents each DOM component as a Javascript Object, and we can dynamically modifies its property to reflect that in the actual DOM in HTML.
-
-Vue can be added as an instance to a webpage and all of its resources reside within that object. The `Vue()` constructor takes in a JS object with some properties
+## Prototypical Inheritance
+The prototype properties of javascript allows us to write inheritance in prototipycal style. Consider building a class Person which has a name and knows how to tell its name. And a Student class student which has grade and can also tells its grade. We need the following:
+1. Person class should have property name 
+2. Person class should have tellName as a function in the prototype
+3. Student should inherit both the property and the function in the Person prototype in its own prototype
+4. Student should have an extra grade property that Person don't have
+5. Student should have an extra tellgrade prototype function that Person don't have
 ```javascript
-var vm = new Vue({
-  // options
-})
-```
-The key properties are 
-1. `el`: When a Vue instance is created, it looks for an element in the webpage to control. That element will be defined by the developer. It can be defined by assigning that element (usually a `div`) an `id`. This `id` is then mentioned in the Vue instance as the value of the `el` key.
-2. `template`: The `template` defines what the Vue instance would display. The template is an HTML style element that can be controlled by the Vue instance. This actually replaces the element in the HTML file whose `id` is mentioned in the Vue instance.
-3. `data`: The `data` is the store of a Vue instance. It stores all the variables it needs.
-4. `methods`: A Vue instance may also need to perform some tasks. For this, it can also have its own methods or functions that can be defined in the methods key of the Vue instance.
-Example:
-```javascript
-new Vue({
-  el: '#app',
-  template:
-  `<div>
-    <h1>Vue.js Application</h1>
-    <p> {{name}}'s age is {{age}}</p>
-    <button @click="incrementAge">Increment Age</button>
-  </div>
-  `,
-  data: {
-      name: 'John',
-      age: 26
-  },
-  methods: {
-      incrementAge() {
-            this.age++
-      }
-  }
-})
-```
-Also vue needs ti be imported using `<script src="https://cdn.jsdelivr.net/npm/vue@2"></script>`
+function Person(name) {
+    this.name = name // 1
+} 
 
-## Mount Vue.js
-Two ways to mount vue virtual DOM to the HTML:
-1. Use `el=#app`. This mounts the content right away
-```javascript
-<!-- This is the div that is assigned the id= 'app' -->
-<div id='app'></div>
+Person.prototype.tellName = function() {
+    console.log(this.name) // 2
+}
 
-<script>
-new Vue({
-    el: '#app' , // This is a way to mount Vue instance!
-    ...
-})
-</script>
-```
-2. Use `$mount('#app')` on the Vue instance. This allows aynchronous mounting.
-```javascript
-<!-- This is the div that is assigned the id= 'app' -->
-<div id='app'></div>
+function Student(name, grade) {
+    Person.call(this, name) // 3
+    this.grade = grade // 4
+} 
 
-<script>
-new Vue({
-    ...
-}).$mount('#app') //This is another way to mount Vue instance!
-</script>
+Student.prototype = Object.create(Person.prototype) //3
+
+Student.prototype.tellGrade = function() {
+    console.log(this.grade) // 5
+}
+
 ```
 
-## Data and function in vue
-The data property in a Vue instance is responsible for storing the variables for that particular instance. The accepted types are:
-* String - Stores strings
-* Number - Stores integers, floating point, and exponential notations
-* Boolean - Stores ‘true’ or ‘false’
-* Null - Represents null value
-* Object - Stores a dictionary
-* Array - Stores a list of variables
-Variables are reference in the template using `{{}}`. For example, the following template renders the name in template with `{{name}}`
+## Functional Programming
+Functional programming is a paradigm to separate data from behavior. Functional programming are based on pure functions. A function is pure if it:
+1. Does not afffect anything outside its scope
+2. Does not rely on anything outside its scope
+3. Produces the same result for the same input every time
+
+A key take away is that the input to the pure function is not modified. And the output should then be passed into another pure function to have a chain of immutable objects.
+
+## Immediately Invoked Function Expressions (IIFE)
+IIFE format of calling function makes sure that functions are pure. 
 ```javascript
-new Vue({
-  el: '#app',
-  template:
-  `<div>
-    <h1> Vue.js Application </h1>
-    <p> My name is {{name}}. See how my name is referenced from the data!</p>
-  </div>
-  `,
-  data: {
-      name: 'John'
-  }
-})
+(function(args){
+    /* function body */
+})(passedargs)
+```
+Every time the function is called, the `passedarg`s is immediately captured by `args` in the inside function. The bracket `()` that wraps the function lock-in the value for `args`
+
+## `Array` and its pure functions
+
+### `.map`
+`Array.map` is a pure function that maps each element in the array with some function:
+```javascript
+// with arrow functions
+arr.map((element) => {/* function */}) 
+arr.map((element, index) => {/* function */})
+arr.map((element, index, array) => {/* function */})
+
+// with function object
+arr.map(map_func)
+
+// with inline funciton 
+arr.map(function(element) {/* function */}})
+arr.map(function(element, index) {/* function */}})
+arr.map(function(element, index, array) {/* function */}})
+```
+The return type is a new array and the original array is untouched.
+
+### `.filter`
+`Array.filter` is a pure fiunction that filters all elements that are evaluated to be true with a predicate function
+```javascript
+// with arrow functions
+arr.filter((element) => {/* function */}) 
+arr.filter((element, index) => {/* function */})
+arr.filter(element, index, array) => {/* function */})
+
+// with function object
+arr.filter(filter_func)
+
+// with inline funciton 
+arr.filter(function(element) {/* function */}})
+arr.filter(function(element, index) {/* function */}})
+arr.filter(function(element, index, array) {/* function */}})
+```
+if the filter function does not return a boolean, its return value will be coerced to a boolean. All JS values are `true` except `false`, `0`, `-0`, `0n`, `""`, `null`, `undefined`, and `NaN`.
+
+### `.forEach`
+`Array.forEach` is the same as the `.map` function except it returns `undefined`. It is intended to modify the outside scope
+```javascript
+// with arrow functions
+arr.forEach((element) => {/* function */}) 
+arr.forEach((element, index) => {/* function */})
+arr.forEach(element, index, array) => {/* function */})
+
+// with function object
+arr.forEach(forEach_func)
+
+// with inline funciton 
+arr.forEach(function(element) {/* function */}})
+arr.forEach(function(element, index) {/* function */}})
+arr.forEach(function(element, index, array) {/* function */}})
 ```
 
-We can also call the function using `{{functionname()}}` inside template string. We can also access data in the function using `this`
+### `.Reduce`
+`Array.Reduce` is a pure function that returns a single value. It first takes a previous value, then it recursively merges the previous value with each element in the array. If no initial value is provided, the first element in the array will be set to the initial value.
 ```javascript
-new Vue({
-  el: '#app',
-  template:
-  `<div>
-    <h1> Vue.js Application </h1>
-    <p> My name is {{getMyName()}}. See how my name is retrived using a function!</p>
-  </div>
-  `,
-  data: {
-      name: 'John'
-  },
-  methods: {
-    getMyName: function(){
-      return this.name;
-    }
-  }
-})
+// Arrow function without initial value
+arr.reduce((previousValue, currentValue) => { /* … */ } )
+arr.reduce((previousValue, currentValue, currentIndex) => { /* … */ } )
+arr.reduce((previousValue, currentValue, currentIndex, array) => { /* … */ } )
+
+// Arrow function with initial values
+arr.reduce((previousValue, currentValue) => { /* … */ } , initialValue)
+arr.reduce((previousValue, currentValue, currentIndex) => { /* … */ } , initialValue)
+arr.reduce((previousValue, currentValue, currentIndex, array) => { /* … */ }, initialValue)
+
+// Callback function
+arr.reduce(callbackFn)
+arr.reduce(callbackFn, initialValue)
+
+// Inline callback function without initial value
+arr.reduce(function(previousValue, currentValue) { /* … */ })
+arr.reduce(function(previousValue, currentValue, currentIndex) { /* … */ })
+arr.reduce(function(previousValue, currentValue, currentIndex, array) { /* … */ })
+
+// Inline callback function with initial value
+arr.reduce(function(previousValue, currentValue) { /* … */ }, initialValue)
+arr.reduce(function(previousValue, currentValue, currentIndex) { /* … */ }, initialValue)
+arr.reduce(function(previousValue, currentValue, currentIndex, array) { /* … */ }, initialValue)
 ```
 
-## Vue lifecycle
-Every vue instance has 4 phases: 
-1. create
-2. mount
-3. update
-4. destory
-
-And there are methods called lifecycle hooks that can perform certain tasks during those stages:
-1. Creation hooks
-`beforeCreate`
-`created`
-2. Mounting hooks
-`beforeMount`
-`mounted`
-3. Updating hooks
-`beforeUpdate`
-`updated`
-4. Destruction hooks
-`beforeDestroy`
-`destroyed`
-
-```javascript
-let myVM = new Vue({
-  el: '#app',
-  template:
-  `<div>
-    <h1>Vue.js Application</h1>
-    <p> Please see the console below to view when each lifecycle hook is executed!</p>
-    <h3> The instance will be destroyed after three seconds! So, destruction hooks will run later. </h3>
-  </div>
-  `,
-  beforeCreate() {
-    console.log('Events and lifecycle have been initialized');
-  },
-  created() {
-    console.log('Vue instance have been created!');
-  },
-  beforeMount() {
-    console.log('vm.$el has not been created yet.')
-  },
-  mounted() {
-    console.log('vm.$el has been created and el has been replaced.')
-  },
-  beforeUpdate() {
-    console.log('Virtual DOM has not re-rendered or patched yet');
-  },
-  updated() {
-    console.log('Virtual DOM has re-rendered and patched.');
-  },
-  beforeDestroy() {
-    console.log('Destroyed!!! Watchers and event listeners have not been teared down yet.');
-  },
-  destroyed() {
-    console.log('Watchers and event listeners have been torn down');
-  }
-});
-
-setTimeout(function() {
-	myVM.$destroy();
-}, 3000);
-// Events and lifecycle have been initialized
-// Vue instance have been created!
-// vm.$el has not been created yet.
-// vm.$el has been created and el has been replaced. 
-// ... 3 SECONDS LATER ...
-// Destroyed!!! Watchers and event listeners have not been teared down yet.
-// Watchers and event listeners have been torn down
-```
+## Object methods

@@ -932,4 +932,178 @@ Javascript maintains a stack, a heap, a webapi, a callback queue and event loop.
 
 https://www.youtube.com/watch?v=8aGhZQkoFbQ&t=1s
 
-Dynamic loading and File I/O will benefit most from asynchronous JS. Dynamic loading means loading more content based on user's action. File I/O refers to file input and output which usually takes a lot of time and can be deferred.
+Dynamic loading and File I/O will benefit most from asynchronous JS. Dynamic loading means loading more content based on user's action. File I/O refers to file input and output which usually takes a lot of time and can be deferred. Functions that operates on user actions and file I/O often has the syntax
+```javascript
+function asyncFunction(parameters, callback) 
+```
+conceptually, think of the ways they are implemented:
+```javascript
+function asyncFunction(parameters, callback) {
+    result = processParameters(parameters) // may take some time or event based
+    return callback(result) // when the result is generated attch callback
+}
+```
+For example, consider if handiling user's request to read and write a file, the filesystem `fs` provides two functions to work with file io:
+```javascript
+const fs = require('fs')
+
+fs.readFile( filename, encoding, callback)
+
+fs.writeFile( file, data, options, callback)
+```
+where after processing the first parameters, a callback function will be called
+
+We can write the following code:
+```javascript
+const fs = require('fs');
+
+onRequest(function(request, response) {
+    readFile(request.fileToRead, function(data) {
+        writeFile(request.fileToWrite, data, function(status) {
+            response.send(status);
+        });
+    });
+});
+```
+With `Promise()` and `.then()`, we can write code above 
+
+TO BE IMPLEMENTED
+
+## ES 2015+ newfeatures
+
+### `class`
+Some importatnt syntax of class:
+1. use the `class` keyword and `constructor` function for a constructor
+2. declare class methods inside the class bracket
+3. declare static method with keyword `static`
+4. inherit from current class using `extend`
+
+```javascript
+class Person {
+    // constructor
+    constructor(first, last, age = 25) {
+        this.firstName = first;
+        this.lastName = last;
+        this.age = age;
+    }
+    // class method
+    growOlder() {
+        this.age++;
+    }
+    // static method
+    static describePersonClass() {
+        console.log('This class creates a person object.');
+    }
+}
+
+// inheritance 
+class Boy extends Person {
+    constructor(first, last, height, age = 10) {
+        super(first, last, age);
+        this.height = height;
+    }
+  
+    printHeight() {
+        console.log(this.height + ' ft');
+    }
+}
+
+const tim = new Boy('Tim', 'Johnson', 3.2, 8);
+tim.growOlder();
+tim.printHeight(); // -> 3.2 ft
+console.log(tim);
+// -> Boy { firstName: 'Tim', lastName: 'Johnson', age: 9, height: 3.2 }
+
+console.log(tim.__proto__ === Boy.prototype); // -> true
+console.log(tim.__proto__.__proto__ === Person.prototype); // -> true
+```
+
+## `Set`
+A set can be created with a iterable. A set contains unqiue elements and inserting duplicate element will be ignored.
+```javascript
+// empty set
+let s = new Set()
+
+// create with array
+let s = new Set([1,2,3]) // -> Set {1, 2, 3}
+
+// create with string
+let s = new Set('abc') // -> Set {'a', 'b', 'c'}
+
+// add element to the set
+s.add('1') // -> Set {'a', 'b', 'c', '1'}
+
+// delete element from the set
+s.delete('1') // -> Set {'a', 'b', 'c'}
+
+// check the size of the set
+s.size // -> 3
+
+// check if an element exists
+s.has('c') // -> true
+
+// remove all elements
+s.clear()
+
+// iterating through set
+for (let item of s) {
+    console.log(item)
+}
+
+// inline forEach method
+s.forEach((item, _, originalSet) => {
+    // do something
+});
+
+// retrieve elements 
+s.values()
+
+// convert to array
+const arr = [...s]
+```
+
+## `Map`
+A map can be created with a iterable of key-value pairs. A set contains unqiue elements and inserting duplicate key will overwrite the previous one.
+```javascript
+// create an empty map
+const m = new Map();
+
+// create an map from key-value pairs
+const m = new Map([
+    [1, "abc"],
+    [5, "five"],
+    [null, 'def'],
+    [{}, 'ghi']
+]);
+
+// insert a key-value
+m.set(1, "abc")
+
+// delete a key
+m.delete(1)
+
+// get the value associate to key
+m.get(5)
+
+// check whether a key exists
+m.has(4)
+
+// get keys
+m.keys()
+
+// get values
+m.values()
+
+// get entries
+m.entries()
+
+// iterate over map
+for (let [key, value] of map) {
+    console.log(key, value)
+}
+```
+
+## `Symbol`
+We can create anonymous symbol that can be used for encapsulation. More information see (MDN page)[https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol#examples]
+
+

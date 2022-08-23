@@ -77,3 +77,22 @@ function logMessage(message: string): void {
 }
 ```
 
+## array type and `readonly`
+If want to declare an type for an array, there are two syntaxes we can use:
+```typescript
+// syntax 1
+let a : type[] = [...];
+
+// syntax 2
+let a : Array<type> = [...];
+
+// declare a number array
+let arr : number[] = [1,2,3];
+let arr : Arrray<number> = [1,2,3];
+```
+If we want an array to be free from modification such as `push` `shift` `unshift` or `arr[i]=v`, use `readonly` keyword or declare as a `ReadonlyArray`
+```javascript
+let arr : readonly number[] = [1,2];
+let arr : ReadonlyArray<number> = [1,2];
+```
+

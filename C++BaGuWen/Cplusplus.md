@@ -331,37 +331,111 @@ int main() {
 ## STL
 STL contains common extended funtionalities of C++
 
-### Algorithm
+### `string`
+string class creates a modern representation of string object compared to the traditional c string
 
-#### `std::min` `std::max` and `std::minmax`
+
+
+### `algorithm`
+
 These function computes the min or max from a pair of values or a list of values.
 
 ```c++
 #include<algorithm>
 
-bool cmp(int a, int b) {
-    return a < b;
-}
+class cmp {
+    public:
+        bool operator(const int& a const int& b) {return a < b;};
+};
+
 int main() {
-    int a = 1;
-    int b = 2;
-    std::min(a, b); // returns the min of a and b
-    std::min(a, b, cmp); // return the min with cmp comparator
-    std::min({1,2,3,4,5}); // return the min of elements in a initializer list
-    std::min({1,2,3,4,5}, cmp); // return the min of elements in a initializer list with cmp comparator
+    // returns the min of a and b
+    int mi = std::min(a, b); 
+
+    // returns the max of a and b
+    int ma = std::max(a, b);
+
+    // returns the min and max in a pair
+    std::pair<int, int> min_max_pair = std::minmax(a, b);
+
+    // sort the container
+    std::sort(v.begin(), v.end());
+    std::sort(v.begin(), v.end(), [](int a, int b){return a < b;}); // sort with custom criteria using lambda
+
+    // reverse the container
+    std::reverse(v,begin(), v.end());
+
+    // rotate the container such that [first, ..., middle, ... end)
+    // becomes [middle,...end-1, first, ..., middle-1)
+    std::rotate(v.begin(), v.find(5), v.end());
+
+    // partition elements in the range with some predicate 
+    // such that all true element comes before the false element
+    // it returns the first element that is false
+    std::vector<int>::iterator it = std::partitio n(v.begin(), v.end(), [](int a) {return a < 10;});
+
+    // get thet first element that is >= 5 in a sorted list
+    std::vector<int>::iterator it = std::lower_bound(v.begin(), v.end(), 5);
+
+    // get the first element that is > 5 in a sorted list
+    std::vector<int>::iterator it = std::upper_bound(v.begin(), v.end(), 5);
+
+    // get the range of elements [begin, end) that is equal to 5
+    std::pair<std::vector<int>::iterator, std::vector<int>::iterator> p = std::equal_range(v.begin(), v.end(), 5);
+
+    /* Heap based algorithms (equivalent to priority_queue) */
+    // make a array into heap
+    std::make_heap(v.begin(), v.end(), cmp);
+
+    // push to heap
+    std::push_heap(v.begin(), v.end(), cmp);
+
+    // pop from heap
+    std::pop_heap(v.begin(), v.end(), cmp);
 
 
-    // similar syntax for max and minmax, notice that 
-    // std::minmax returns a pair p
-    // where p.first is the min
-    // and p.second is the max
-    std::max(a, b);
-    std::minmax(a, b);
+    // find min element in the container, by default <
+    std::min_element(v.begin(), v.end(), cmp);
+    
+    // find max element in the container
+    std::max_element(v.begin(), v.end(), cmp);
+
+
+    // find minmax in a pair
+    std::pait<int, int> p = std::minmax_element(v.begin(), v.end(), cmp);
 }
 ```
 
-#### 
+### functional
+Functional defines common callable objects
+```c++
+#include <functional>
 
+Ret func(Arg1 a, Arg2 b) {
+    return Ret;
+}
+
+int main() {
+    // cast a function to a function object
+    std::function<Ret(Arg1, Arg2)> f{func};
+    
+    // bind argumenst to a function
+    std::function<Ret(Arg2)> f = std::bind(func, 5, _1);
+
+    /* common function objects */
+    // create a less function object
+    std::less<int> lt;
+
+    // create a greater function object
+    std::greater<int> gt; 
+
+    // create a less than function object
+    std::less_equal<int> let;
+
+    // create a greater than function object
+    std::greater_equal<int> get;
+}
+```
 
 ### Utility
 
@@ -415,9 +489,10 @@ class Movable {
 };
 ```
 
-#### `std::pair` and `std::tuple`
-Pair stores pair of elements
+#### `<utility>`
+Pair stores pair of elements, tuple generalizes pair and can store arbitrary number of elements.
 ```c++
+#include<utility>
 int main() {
     // declare a pair
     std::pair<int, double> p = std::make_pair(5, 3.14);
@@ -427,19 +502,33 @@ int main() {
     // accessing the second element
     p.second;
     std::get<1>(p);
-}
-```
-Tuple generalizes pair and can store arbitrary number of elements
-```c++
-int main() {
-    // declare a tuple
+    
+    // tuple
     std::tuple<int, double, char> t = std::make_tuple(5, 3.14, 'C');
     // accesing the n-th element
     std::get<n>(t);
 }
 ```
 
-### Containers, 
+### `<numeric>`
+```c++
+#include <numeric>
+
+int main() {
+    std::vector<int> v{1,2,3,4,5,6,7,8,9};
+    // add all elements in an array
+    std::accumulate(v.begin(), v.end(), 0);
+
+    // compute prefix sum into arr
+    std::vector<int> ans;
+    std::partial_sum(v.begin(), v.end(), ans.begin());
+}
+```
+
+### `<random>`
+
+
+### Containers
 
 #### `std::array` (C++11)
 array is fixed size and supports random access at O(1) 
@@ -507,6 +596,31 @@ int main() {
     s..top();
 }
 ```
+
+#### `std::queue`
+queue supports FIFO insertion and deletion in O(1)
+```c++
+#include<queue>
+
+int main() {
+    // initialize an empty queue
+    std::queue<int> q;
+
+    // push to the queue
+    q.push(1);
+
+    // pop from the queue
+    q.pop();
+
+    // the last pushed element
+    q.back();
+
+    // the first pushed element 
+    // the elemenent that will be popped when q.pop() is called
+    q.front();
+}
+```
+
 
 #### `std::deque`
 Deque supports push and pop from the begin or end in O(1) time and random access in O(1)
@@ -651,12 +765,19 @@ int main() {
     m[1]=2; // equivalent
     // find the iterator of a given key
     multimapIterator it = mm.find(1);
+    // erase an element
+    mm.erase(it);
+    mm.erase(1); // equivalent
     // return first iterator that has key >= 1
     multimapIterator it = mm.lower_bound(1);
     // return first iterator that has key > 1
     multimapIterator it = mm.upper_bound(1);
     // return a pair of iterator whose range contains all keys = 1
     std::pair<multimapIterator, multimapIterator> itpair = mm.equal_range(1);
+    // iterate ovrer map
+    for (multimapIterator it = mm.begin(); it != mm.end(); ++it) {
+        cout << "key:" << mm.first << ", value:" << it.second << " ";
+    }
 }
 ```
 #### `std::unordered_map`, `std::unordered_set`
@@ -665,11 +786,71 @@ int main() {
 #include <unordered_map>
 #include <unordered_set>
 
+typedef std::unordered_map<int,int>::iterator umapIter;
+typedef std::unordered_set<int>::iterator usetIter;
+
 int main() {
     // create an empty hashmap
     std::unordered_map<int, int> m;
+
+    // insert element to hashmap
+    m.insert(std::make_pair(1,2));
+    m[1]=2; // equivalent
+
+    // find an element
+    umapIter it = m.find(1);
+
+    // erase and element
+    m.erase(1);
+    m.erase(it); //equivalent
+
+
     // create an empty hashset
     std::unordered_set<int> s;
-    // 
+
+    // insert element to the hashset
+    s.insert(5);
+
+    // find an element in the hashset
+    usetIter it = s.find();
+
+    // erase an element from the hashset
+    s.erase(5);
+    s.erase(it); // equivalent
 }
 ```
+
+## Useful C Libraries
+
+### `<cctype>` or `ctype.h`
+`<cctype>` or `ctype.h` works with characters, However, note that the argument and input can be type `int`, therefore, truncation can happen. In most cases char should be good.
+
+```c
+#include <cctype>
+
+int main() {
+    char c;
+
+    // check if character is alpha numeric
+    int is_alpha_numeric = isalnum(c);
+    
+    // check if character is alphabetic
+    int is_alphabetic = isalpha(c);
+
+    // check if character is 0 - 9
+    int is_digit = isdigit(c);
+
+    // check if character is lowercase
+    int is_lower = islower(c);
+
+    // check if character is uppercase
+    int is_upper = isupper(c);
+
+    // convert character to upper case
+    char upper_case = toupper(c);
+
+    // convert character to lower case
+    char lower_case = tolower(c);
+}
+```
+

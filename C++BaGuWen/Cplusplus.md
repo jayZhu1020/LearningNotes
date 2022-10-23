@@ -333,7 +333,35 @@ STL contains common extended funtionalities of C++
 
 ### `string`
 string class creates a modern representation of string object compared to the traditional c string
+```c++
+#include <string>
 
+int main() {
+    // initialize an empty string
+    string s;
+
+    // append character to string
+    s.push_back('\n');
+
+    // get the character at 5-th position
+    s[5];
+
+    // change the character at 5-th position
+    s[5] = '\n';
+
+    // extend the string
+    s += "string to append";
+    s.append("string to append"); //equivalent
+
+    // conversion from string to numerical
+    int i = stoi("5");
+    double d = stod("3.14");
+
+    // convert numerical values to string
+    string s = to_string(5);
+    string s = to_string(-1.67)
+}
+```
 
 
 ### `algorithm`
@@ -854,3 +882,26 @@ int main() {
 }
 ```
 
+### `<cmath>` or `math.h`
+```c++
+#include <cmath>
+
+int main() {
+    double base, exponent, n;
+    
+    // raise to the power
+    double power = pow(base, exponent);
+
+    // square root of a number 
+    double square = sqrt(n);
+
+    // round up a value
+    double ceiling = ceil(n);
+
+    // round down a value
+    double flr = floor(n);
+
+    // compute absolute value
+    double absolute = abs(n);
+}
+```
